@@ -2,7 +2,6 @@ package org.example.tiendaonline.TiendaOnline.Controladores;
 
 import jakarta.validation.Valid;
 import org.example.tiendaonline.TiendaOnline.DTO.Cliente;
-import org.example.tiendaonline.TiendaOnline.Repository.ClienteRepository;
 import org.example.tiendaonline.TiendaOnline.Servicios.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -26,7 +25,7 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.findAll());
     }
 
-    @GetMapping("/{}id")
+    @GetMapping("/{id}")
     @Cacheable
     public ResponseEntity<Cliente> findById(@PathVariable Integer id){
         try{

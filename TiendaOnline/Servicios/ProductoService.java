@@ -23,18 +23,27 @@ public class ProductoService {
     }
 
     public Producto save(Producto producto){
+        if(productoRepository.existsByNombre(producto.getNombre())){
+            throw new IllegalArgumentException("El producto con este nombre ya existe.");
+        }
         return productoRepository.save(producto);
     }
 
-    public boolean update (Producto producto){
+    public boolean update(Producto producto) {
         Optional<Producto> optional = productoRepository.findById(producto.getId());
-        if(optional.isPresent()){
-            productoRepository.save(producto);
-            return true;
-        }else{
+        if (!optional.isPresent()) {
             return false;
         }
+
+        // verificamos si el nombre ya está en uso por otro producto
+        if (productoRepository.existsByNombreAndIdNot(producto.getNombre(), producto.getId())) {
+            throw new IllegalArgumentException("El producto con este nombre ya existe.");
+        }
+
+        productoRepository.save(producto);
+        return true;
     }
+
 
     public boolean delete(Integer id){
         Optional<Producto> optional = productoRepository.findById(id);

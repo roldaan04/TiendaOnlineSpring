@@ -1,6 +1,10 @@
 package org.example.tiendaonline.TiendaOnline.DTO;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -8,29 +12,41 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "compra")
-public class Compra {
+@Table(name = "historial")
+public class Historial {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
+    @NotNull
     @Column(name = "fecha_compra", nullable = false)
     private LocalDate fechaCompra;
 
     @ColumnDefault("1")
     @Column(name = "cantidad")
     private Integer cantidad;
+
+    @Size(max = 100)
+    @Pattern(regexp = "^(compra|devolucion)$", message = "el tipo solo puede ser o compra o devoluciom")
+    @Column(name = "tipo", length = 100)
+    private String tipo;
+
+    @Size(max = 200)
+    @Column(name = "descripcion", length = 200)
+    private String descripcion;
 
     public Integer getId() {
         return id;
@@ -48,11 +64,11 @@ public class Compra {
         this.cliente = cliente;
     }
 
-    public Producto getProducto() {
+    public org.example.tiendaonline.TiendaOnline.DTO.Producto getProducto() {
         return producto;
     }
 
-    public void setProducto(Producto producto) {
+    public void setProducto(org.example.tiendaonline.TiendaOnline.DTO.Producto producto) {
         this.producto = producto;
     }
 
@@ -61,7 +77,7 @@ public class Compra {
     }
 
     public void setFechaCompra(LocalDate fechaCompra) {
-        this.fechaCompra = fechaCompra;
+        this.fechaCompra = LocalDate.now();
     }
 
     public Integer getCantidad() {
@@ -70,6 +86,22 @@ public class Compra {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 }

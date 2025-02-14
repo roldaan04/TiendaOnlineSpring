@@ -44,17 +44,26 @@ public class ProductoController {
     }
 
     @PostMapping
-    public ResponseEntity<Producto> create(@RequestBody @Valid Producto producto){
-        return ResponseEntity.ok(productoService.save(producto));
+    public ResponseEntity<?> create(@RequestBody @Valid Producto producto){
+        try{
+            Producto p = productoService.save(producto);
+            return ResponseEntity.ok(p);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping
     public ResponseEntity<String> update(@RequestBody @Valid Producto producto){
-        boolean actualizado = productoService.update(producto);
-        if(actualizado){
-            return ResponseEntity.ok(producto.toString());
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El producto ha sido actualizado");
+        try{
+            boolean actualizado = productoService.update(producto);
+            if(actualizado){
+                return ResponseEntity.ok(producto.toString());
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El producto no ha sido actualizado");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
