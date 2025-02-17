@@ -61,7 +61,7 @@ public class HistorialController {
     public ResponseEntity<?> deleteHistorial(@PathVariable Integer id) {
         boolean ok = historialService.delete(id);
         if(ok){
-            return ResponseEntity.ok("Ha deletado el historial");
+            return ResponseEntity.ok("Ha borrado el historial");
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado historial a borrar");
         }
