@@ -26,7 +26,7 @@ public class Cliente {
 
     @Size(max = 50)
     @NotNull
-    @NotBlank(message = "el campo apellido no puede esatr vacio")
+    @NotBlank(message = "el campo apellido no puede estar vacio")
     @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
 
